@@ -4,6 +4,8 @@
     <p><input type="password" placeholder="password" v-model="password"></p>
     <p><button @click="register()">Submit</button></p>
     <p><button @click="singInWithGoogle">Sign in with Google</button></p>
+    <h3 style="color:red">{{errMsg}}</h3>
+
 </template>
 
 <script>
@@ -18,6 +20,7 @@ export default {
         const email = ref('')
         const password = ref('')
         const router = useRouter()
+        const errMsg = ref()
 
         const register = ()=>{
             createUserWithEmailAndPassword(getAuth(), email.value, password.value)
@@ -30,7 +33,20 @@ export default {
             })
             .catch((error) => {
                 console.error(error.code);
-                console.error(error.message);
+                switch(error.code) {
+                    case "auth/invalid-email":
+                        errMsg.value = 'Invalid email'
+                        break;
+                    case "auth/user-not-found":
+                        errMsg.value = 'No account with that email was found'
+                        break;
+                    case "auth/wrong-password":
+                        errMsg.value = 'Incorrect password'
+                        break;
+                    default:
+                        errMsg.value = 'Email or password was incorrect'
+                        break;
+                }
             });
         }
 
@@ -45,7 +61,7 @@ export default {
             });
         }
 
-        return {email, password, register, singInWithGoogle}
+        return {email, password, register, errMsg, singInWithGoogle}
     },
 }
 </script>

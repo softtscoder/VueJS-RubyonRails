@@ -2,15 +2,17 @@
     <h1>Login </h1>
     <p><input type="email" placeholder="email" v-model="email"></p>
     <p><input type="password" placeholder="password" v-model="password"></p>
-    <p><button @click="register()">Submit</button></p>
-    <!-- <p><button @click="singInWithGoogle">Sign in with Google</button></p> -->
+    <p><button @click="login()">Login</button></p>
+    <h3 style="color:red">{{errMsg}}</h3>
+    <p><button @click="singInWithGoogle">Sign in with Google</button></p>
 </template>
 
 <script>
 import {ref} from 'vue'
 import {useRouter} from 'vue-router'
 
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword,
+          signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 export default {
     setup() {
@@ -18,7 +20,7 @@ export default {
         const password = ref('')
         const router = useRouter()
         const errMsg = ref()
-        const register = ()=>{
+        const login = ()=>{
             signInWithEmailAndPassword(getAuth(), email.value, password.value)
             .then((userCredential) => {
                 // Signed in 
@@ -47,7 +49,22 @@ export default {
         }
 
 
-        return {email, password, register}
+        const singInWithGoogle = ()=> {
+            const provider = new GoogleAuthProvider();
+            signInWithPopup(getAuth(), provider)
+            .then((result) => {
+                console.log(result.user);
+                console.log(result.user.displayName);
+                console.log(result.user.email);
+                console.log(result.user.photoURL)
+                router.push('/feed');
+            }).catch((error) => {
+                console.error(error)
+            });
+        }
+        
+
+        return {email, password, errMsg, login, singInWithGoogle}
     },
 }
 </script>

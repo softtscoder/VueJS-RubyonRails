@@ -14,9 +14,7 @@ const routes = [
   },
   {
     path: '/feed', component: () => import('../views/Feed.vue'),
-    meta: {
-      requiresAuth: true,
-    }
+    meta: { requiresAuth: true, }
   }
 ]
 

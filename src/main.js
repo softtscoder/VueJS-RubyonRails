@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
+import store from "./store.js";
 import { initializeApp } from 'firebase/app';
 
 const config = {
@@ -15,4 +16,4 @@ const config = {
 
 initializeApp(config);
 
-createApp(App).use(router).mount('#app')
+createApp(App).use(router).use(store).mount('#app')

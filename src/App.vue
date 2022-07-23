@@ -1,10 +1,10 @@
 <template>
   <div id="nav">
-    <router-link to="/">Home</router-link> |
+    <!-- <router-link to="/">Home</router-link> |
     <router-link to="/feed">Feed</router-link> |
     <router-link to="/register">Register</router-link> |
     <router-link to="/sign-in">Login</router-link> |
-    <button @click="handlesSignOut" v-if="isLoggedIn">Sign Out</button>
+    <button @click="handlesSignOut" v-if="isLoggedIn">Sign Out</button> -->
 
   </div>
   <router-view/>
@@ -52,24 +52,12 @@ export default {
 
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+* {
+  margin: 0;
+  padding: 0;
+  font-size: 62.5%;
+  line-height: 1.6rem;
+  font-family: 'Roboto', sans-serif;
+  box-sizing: border-box;
 }
 </style>

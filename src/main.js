@@ -1,8 +1,10 @@
 import { createApp } from 'vue'
 import App from './App.vue'
+import Vue from './App.vue'
 import router from './router'
 import store from "./store.js";
 import { initializeApp } from 'firebase/app';
+import VueSession from 'vue-session'
 
 const config = {
     apiKey: "AIzaSyDKbCgP44DxlN2gOwUcIGiAS8BvfcSMv-A",
@@ -15,5 +17,6 @@ const config = {
 };
 
 initializeApp(config);
+// createApp(Vue).use(VueSession)
 
 createApp(App).use(router).use(store).mount('#app')

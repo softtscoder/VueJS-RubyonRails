@@ -18,33 +18,8 @@ import { getAuth, signOut, onAuthStateChanged } from 'firebase/auth'
 export default {
   setup() {
     const router = useRouter()
-    const isLoggedIn = ref(false)
-    const auth = getAuth();
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        isLoggedIn.value = true
-        // ...
-      } else {
-        isLoggedIn.value = false
 
-      }
-    });
-
-
- 
-    const handlesSignOut = ()=> {
-      const auth = getAuth();
-      signOut(auth)
-        .then(() => {
-        console.log('Sign-out successful')
-        router.push('/')
-      })
-        .catch((error) => {
-        console.error('Sign-out error')
-      });
-    }
-
-    return {handlesSignOut, isLoggedIn}
+    return {}
 
   },
 }
@@ -57,7 +32,7 @@ export default {
   padding: 0;
   font-size: 62.5%;
   line-height: 1.6rem;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   box-sizing: border-box;
 }
 </style>

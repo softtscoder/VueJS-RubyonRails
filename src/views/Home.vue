@@ -8,8 +8,14 @@
       <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis laborum recusandae iusto quas ea repudiandae aperiam optio ullam ipsa, modi quos nulla culpa aliquam! Labore voluptatem neque saepe iure assumenda!</p>
       <div class="link">
         <!-- <router-link to="/register" class="register">Register</router-link> -->
-        <!-- Button trigger modal -->
-        <a href="" class="login" data-toggle="modal" data-target="#exampleModal">Login</a>    
+        <div v-if="isLoggedIn" class="notLoggedInBtn">
+          <router-link to="/feed" class="goToFeedBtn">Go to feed</router-link>
+          <a href="" @click="handlesSignOut" class="goToSignOut">Sign Out</a>  
+        </div>
+        <div v-else>
+          <!-- Button trigger modal -->
+          <a href="" class="login" data-toggle="modal" data-target="#exampleModal" >Login</a> 
+        </div>   
       </div>
     </div>
 
@@ -60,40 +66,70 @@ import { useStore } from "vuex"
 import {useRouter} from 'vue-router'
 
 import { getAuth, createUserWithEmailAndPassword,
-          signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+          signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
 
 export default {
   setup() {
 
-    const router = useRouter()
+    const router = useRouter();
     const store = useStore();
+    const auth = getAuth();
+    const usersList = ref(null);
+    const isLoggedIn = ref(false)
+    const fetchURL = 'http://localhost:3000/users/sign_in';
+
   
     const signInWithGoogle = ()=> {
-        const provider = new GoogleAuthProvider();
-        signInWithPopup(getAuth(), provider)
-        .then((result) => {
-            const removeModal = document.querySelector('.modal-backdrop');
-            removeModal.style.display = "none";
-            store.state.signInFlag = true;
-            store.state.userInfo.name = result.user.displayName;
-            store.state.userInfo.email = result.user.email;
-            store.state.userInfo.photoUrl = result.user.photoURL;
+      const provider = new GoogleAuthProvider();
+      signInWithPopup(getAuth(), provider)
+      .then((result) => {
+        console.log('Sign in with gg successfully');
+        // console.log(usersList.value)
+        console.log('result.user', result.user);
+        const removeModal = document.querySelector('.modal-backdrop');
+        removeModal.style.display = "none";
+        router.push('/feed')
 
-            console.log(store.state.signInFlag)
-            console.log(store.state.userInfo.name)
-            console.log(store.state.userInfo.email)
-            console.log(store.state.userInfo.photoUrl)
-            // console.log(result.user);
-            // console.log(result.user.displayName);
-            // console.log(result.user.email);
-            // console.log(result.user.photoURL)
-            router.push('/feed');
-        }).catch((error) => {
-            console.error(error)
-        });
+        // store.state.signInFlag = true;
+        // store.state.userInfo.name = result.user.displayName;
+        // store.state.userInfo.email = result.user.email;
+        // store.state.userInfo.photoUrl = result.user.photoURL;
+
+        // console.log(store.state.signInFlag)
+        // console.log(store.state.userInfo.name)
+        // console.log(store.state.userInfo.email)
+        // console.log(store.state.userInfo.photoUrl)
+
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
     }
 
-        return {signInWithGoogle}
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        isLoggedIn.value = true
+        // ...
+      } else {
+        isLoggedIn.value = false
+      }
+    });
+
+
+    const handlesSignOut = ()=> {
+      signOut(auth)
+        .then(() => {
+          // this.$session.destroy()
+        console.log('Sign-out successful')
+        router.push('/')
+      })
+        .catch((error) => {
+        console.error('Sign-out error')
+      });
+    };
+
+    return {handlesSignOut, signInWithGoogle, isLoggedIn}
   }
 
 }
@@ -138,12 +174,14 @@ export default {
     display: flex;
     position: absolute;
     top: 25%;
-    margin: 0 10%;
+    height: 500px;
+    padding: 0 0 0 10%;
+    /* margin: 0 0 0 10%; */
     justify-content: space-around;
   }
 
   .logo-img {
-    width: 360px;
+    width: 30vw;
     transform: translateY(-25%);
   }
 
@@ -275,5 +313,45 @@ export default {
     opacity: 0.8;
   }
 
+  .notLoggedInBtn {
+    display: flex;
+    justify-content: space-between;
+    width: 200px;
+    height: 30px;
+  }
+
+  .goToFeedBtn, .goToSignOut {
+    text-decoration: none;
+  }
+
+  .goToFeedBtn:hover {
+    background-color: #555;
+  }
+
+  .goToSignOut:hover {
+    background-color: rgb(219, 92, 117);
+  }
+
+  .goToFeedBtn {
+    width: 80px;
+    height: 30px;
+    line-height: 30px;
+    background-color: black;
+    color: white;
+    font-size: 1.5rem;
+    text-align: center;
+    border-radius: 4px;
+  }
+
+  .goToSignOut {
+    width: 80px;
+    height: 30px;
+    line-height: 30px;
+    background-color: crimson;
+    color: white;
+    font-size: 1.5rem;
+    text-align: center;
+    border-radius: 4px;
+  }
 
 </style>

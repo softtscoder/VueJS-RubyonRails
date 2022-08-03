@@ -13,6 +13,7 @@ const store = createStore({
       //   email: '',
       //   photoUrl: ''
       // },
+      postsLen: null,
       posts: [],
       post: null,
       postInfo: {name: '', price: '', genre: '', status: '', created_time: ''},
@@ -28,18 +29,36 @@ const store = createStore({
       state.transaction = transactionPayload;
     },
 
+    removeDeletedPost(state, deletedId) {
+      state.posts = state.posts.filter(post => post.id != deletedId);
+    },
+
     setEditPost(state, postPayLoad) {
       state.post = postPayLoad;
       console.log('state.post in mutations', state.post)
     },
 
     setPosts(state, postsPayLoad) {
+      state.postsLen = postsPayLoad.length;
       state.posts = postsPayLoad;
+      console.log('posts len in commit', state.postsLen);
+      // return postsPayLoad.length;
     },
 
     setNewPost(state, addInfo) {
       state.postInfo = addInfo;
+      console.log('state.postInfo', state.postInfo);
       state.posts.push(addInfo);
+      console.log('state.posts in commit', state.posts)
+      state.postsLen = state.posts.length;
+      console.log('postsLen in commit', state.postsLen);
+    },
+
+    testCommit(state, data) {
+      // state.postsLen = data.length;
+      console.log('data in testCommit', data);
+      // console.log('data len in testCommit', data.value.length);
+      console.log('state.postsLen in testCommit', state.postsLen);
     },
   },
 
@@ -56,7 +75,7 @@ const store = createStore({
       fetch('http://localhost:3000/items/' + id, { method: 'DELETE' })
       .then((res) => {
         console.log('delete succesfully');
-        // commit('deleteProduct')
+        commit('removeDeletedPost', id)
       });
     },
 
@@ -96,7 +115,8 @@ const store = createStore({
      .then(result => {
        console.log('Success:', result);
        // items.value.push({id: result.id, content: result.content, updated_at: result.updated_at})
-       commit("setNewPost", addInfo);
+      //  this.state.postInfo = result;
+       commit("setNewPost", result);
      })
      .catch((error) => {
        console.error('Error:', error);
@@ -110,7 +130,30 @@ const store = createStore({
         if (!response.ok) throw new Error("Something went wrong");
 
         const data = await response.json();
+
         commit("setPosts", data);
+        
+      } catch (err) {
+        // commit("setError", err);
+        console.log(err);
+      }
+    },
+
+    async fetchAllPostsAsync({ commit, rootState }) {
+      try {
+        const response = await fetch("http://localhost:3000/items");
+
+        if (!response.ok) throw new Error("Something went wrong");
+
+        const data = await response.json();
+        this.state.posts = data;
+        this.state.postsLen = this.state.posts.length; 
+        console.log(this.state.postsLen);
+        commit("setPosts", data);
+
+        return data;
+        console.log(this.state.posts[0]);
+        
       } catch (err) {
         // commit("setError", err);
         console.log(err);

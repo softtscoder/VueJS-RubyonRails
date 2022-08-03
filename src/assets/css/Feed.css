@@ -49,6 +49,8 @@ cursor: default;
     width: 100px;
     border-radius: 4px;
     display: none;
+    border: solid 1px var(--text-color);
+    border-top: none;
 }
 
 
@@ -117,7 +119,7 @@ cursor: default;
     display: flex;
     align-content: center;
     padding-left: 20px;
-    padding-bottom: 15px;
+    padding-bottom: 10px;
     border-bottom: solid 1px #bbb;
 
 }
@@ -126,6 +128,7 @@ cursor: default;
     width: 45px;
     height: 45px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 3px;
+    border-radius: 3px;
     object-fit: cover;
 }
 
@@ -136,14 +139,14 @@ cursor: default;
 }
 
 .item-header-content > p {
-    line-height: 2.1rem;
+    line-height: 1.8rem;
 
 }
 
 .item-body {
     display: flex;
     flex-wrap: wrap;
-    padding-bottom: 20px;
+    padding-bottom: 15px;
 }
 
 .item-body .item-body-genre,
@@ -159,10 +162,8 @@ cursor: default;
 }
 
 .item-body-status {
-    font-size: 1.3rem;
-    margin-top: 10px;
-    margin-left: 20px;
-    padding: 2px;
+    font-size: 1.2rem;
+    padding: 0 2px;
     text-align: left;
     width: fit-content;
 }
@@ -216,6 +217,91 @@ cursor: default;
 }
 
 .form-group > input {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
 }
 
+.form-group > select {
+    font-size: 1.2rem;
+}
+
+.form-group > select > option {
+    font-size: 1.2rem;
+}
+
+.pagination {
+    position: absolute;
+    bottom: 120px;
+    left: 50%;
+    /* transform: translateX(-50%); */
+}
+
+#control {
+    display: flex;
+    align-items: center;
+    margin: 0 20px;
+}
+
+.buttonPage {
+    font-size: 1.8rem;
+    height: 30px;
+    width: 30px;
+    margin: 0 5px;
+    border-radius: 50%;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+button:focus {
+    outline: none;
+}
+
+.active {
+    background-color: #C20000;
+    color: white;
+}
+
+.pagePrev, .pageNext {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.sidebar__items {
+    font-size: 5rem;
+}
+
+.sidebar__items .addProductBtn {
+    font-size: 1.9rem;
+}
+
+.sidebar__items li {
+    margin: 20px 0;
+}
+
+.sidebar__items li:hover {
+    color: white;
+    transition: all 0.1s ease-out;
+    cursor: pointer;
+}
+
+.sidebar__items li i {
+    font-size: 1.8rem;
+    margin-right: 10px;
+}
+
+.sidebar__items li a {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    text-decoration: none;
+}
+
+.sidebar__items li a i {
+    font-size: 1.8rem;
+    margin-right: 10px;
+}
+
+.sidebar__items li a:hover {
+    color: white;
+    transition: all 0.1s ease-out;
+}

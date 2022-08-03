@@ -1,6 +1,7 @@
 <template>
-  <div class="bar flex">
-    <div id="sidebar" class="font-semibold h-screen pt-5" style="background-color: #6bcfa2; color: #CC0000; width: 200px; box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
+  <div class="bar">
+    <input type='checkbox' id='toggle' style="position: absolute; left: -20px">
+    <div id="sidebar">
       <div class="mt-15 text-center sidebar-menu">
           <ul class="sidebar__items">
               <li><router-link to="/"><i class="fa-solid fa-house-user"></i>Home</router-link></li>
@@ -14,12 +15,12 @@
         <div class="sidebar-search__input">
 
           <div class="search-item">
-            <p class="search-item__text">Name {{searchName}}</p>
+            <p class="search-item__text">Name</p>
             <input v-model="searchName" class="search-item-name" placeholder="search by name" />
           </div>
           
           <div class="search-item">
-            <p class="search-item__text">Genre {{searchGenre}}</p>
+            <p class="search-item__text">Genre</p>
             <select v-model="searchGenre" class="search-item-genre">
               <option value='Book'>Book</option>
               <option value='Bag'>Bag</option>
@@ -30,7 +31,7 @@
           </div>
           
           <div class="search-item">
-            <p class="search-item__text">Status {{searchStatus}}</p>
+            <p class="search-item__text">Status</p>
             <select v-model="searchStatus" class="search-item-status">
               <option>Delivering</option>
               <option>Delivered</option>
@@ -48,8 +49,8 @@
 
     <main>
 
-      <div id="navbar" class="h-24 rounded-b-3xl" style="background-color: #bbf0d8; color: #CC0000; width: calc(100vw - 200px); left:200px; box-shadow: rgba(17, 17, 26, 0.1) 0px 0px 16px;">
-        <div class="navbar__hamburger"><i class="fa-solid fa-bars"></i></div>
+      <div id="navbar">
+        <label for="toggle" class="navbar__hamburger"><i class="fa-solid fa-bars"></i></label>
         <div class="navbar__userLink">
           <div class="navbar__userLink-info " >
             <div class="flex items-center navbar__userLink-info-hoverr">
@@ -106,7 +107,7 @@
 
       </div>
 
-      <div v-else>No Post found</div>
+      <div v-else class="noPostFound">No product found :((</div>
 
       <!-- <div id="container"></div> -->
   
@@ -115,12 +116,17 @@
         <button class="pagePrev" style="font-size: 2rem;"><i class="fa-solid fa-angle-left"></i></button>
         <div id="control">
         </div>
-      <button class="pageNext" style="font-size: 2rem;"><i class="fa-solid fa-angle-right"></i></button>
-    </div>
+        <button class="pageNext" style="font-size: 2rem;"><i class="fa-solid fa-angle-right"></i></button>
+      </div>
       
 
     </main>
 
+
+   
+
+
+  </div>
 
     <!-- Product Modal -->
     <div class="modal fade" id="addProduct-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -178,11 +184,6 @@
         </div>
       </div>
     </div>
-
-
-  </div>
-
-
 </template>
 
 <script>
@@ -471,8 +472,14 @@ export default {
       if(posts.length > 0) {
         noPostsFound.value = false;
         setNumBtn(posts.length, 0);
+        setClickBtn();
       }
-      else {noPostsFound.value = true}
+      else {
+        noPostsFound.value = true;
+        noticeDelivering.value = 0;
+        noticeDelivered.value = 0;
+        noticeCancelled.value = 0;
+      }
       
     });
 

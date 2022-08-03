@@ -2,11 +2,35 @@
     padding: 0;
   }
 
+.bar {
+    display: flex;
+}
+
+main {
+    flex: 1;
+    /* position: absolute; */
+    /* left: 200px; */
+    
+}
+
+#toggle:checked ~ main {
+    flex: 1;
+}
+
 #navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 20px;
+    height: 55px;
+    background-color: #bbf0d8; 
+    color: #CC0000; 
+    /* width: calc(100vw - 200px); */
+
+    box-shadow: rgba(17, 17, 26, 0.1) 0px 0px 16px;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    transition: all 0.3s;
 }
 
 .navbar__hamburger {
@@ -91,11 +115,6 @@ cursor: default;
     border-top: solid 1px #C20000;
 
 }
-
-.vcl {
-    text-decoration: none;
-}
-
 
 /* main board content, show items */
 .mainBoard {
@@ -266,6 +285,28 @@ button:focus {
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
+#sidebar {
+    position: relative;
+    background-color: #6bcfa2; 
+    color: #CC0000; 
+    width: 200px; 
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    font-weight: bold;
+    height: 100vh;
+    padding-top: 30px;
+    transition: all 0.15s;
+    left: 0;
+}
+
+#toggle:checked ~ #sidebar {
+    /* left: calc(100vw - 300px); */
+    /* animation: slideIn 0.2s linear forwards; */
+    left: -200px;
+    position: absolute;
+}
+
+
+
 .sidebar__items {
     font-size: 5rem;
     margin-left: 20px;
@@ -417,3 +458,10 @@ button:focus {
 .clearSearch:hover {
     background-color: white;
 }
+
+.noPostFound {
+    font-size: 3rem;
+    color: #bbb;
+    margin: 50px 0 0 40px;   
+}
+

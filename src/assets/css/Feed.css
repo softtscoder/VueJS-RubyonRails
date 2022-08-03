@@ -268,10 +268,13 @@ button:focus {
 
 .sidebar__items {
     font-size: 5rem;
+    margin-left: 20px;
 }
 
 .sidebar__items .addProductBtn {
     font-size: 1.9rem;
+    display: flex;
+    justify-content: flex-start;
 }
 
 .sidebar__items li {
@@ -346,4 +349,71 @@ button:focus {
 .notice-cancelled {
     border-left-color: var(--cancelled-color);
     color: var(--cancelled-color);
+}
+
+
+/* search sidebar */
+.sidebar-search {
+    height: 40vh;
+}
+
+.sidebar-search__text {
+    font-size: 2rem;
+    margin-top: 40px;
+    margin-left: 20px;
+}
+
+.sidebar-search__text i {
+    font-size: 1.8rem;
+    margin-right: 10px;
+}
+
+.sidebar-search__input {
+    display: flex;
+    flex-direction: column;
+    height: 65%;
+    width: fit-content;
+    font-size: 1rem;
+}
+
+.search-item {
+    margin: 40px 0 0 10px;
+    height: 25px;
+    /* width: 50px; */
+}
+
+.search-item__text {
+    font-size: medium;
+}
+
+.search-item-name {
+    margin-top: 5px;
+    font-size: 1.2rem;
+    height: 25px;
+    width: 150px;
+}
+
+.search-item-genre, .search-item-status {
+    margin-top: 5px;
+    font-size: 1.5rem;
+    height: 25px;
+    width: 150px;
+}
+
+.search-item-genre option, 
+.search-item-status option {
+    font-size: 1.3rem;
+}
+
+.clearSearch {
+    width: 150px;
+    height: 25px;
+    font-size: 1.3rem;
+    background-color: #eee;
+    border-radius: 4px;
+    margin-left: 10px;
+}
+
+.clearSearch:hover {
+    background-color: white;
 }

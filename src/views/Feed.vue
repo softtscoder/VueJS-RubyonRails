@@ -1,6 +1,6 @@
 <template>
   <div class="bar flex">
-    <div id="sidebar" class="font-semibold h-screen pt-5 flex justify-center" style="background-color: #6bcfa2; color: #CC0000; width: 200px; box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
+    <div id="sidebar" class="font-semibold h-screen pt-5" style="background-color: #6bcfa2; color: #CC0000; width: 200px; box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
       <div class="mt-15 text-center sidebar-menu">
           <ul class="sidebar__items">
               <li><router-link to="/"><i class="fa-solid fa-house-user"></i>Home</router-link></li>
@@ -10,8 +10,38 @@
       </div>
 
       <div class="sidebar-search">
-        <p>Search</p>
-        
+        <p class="sidebar-search__text"><i class="fa-solid fa-magnifying-glass"></i>Search</p>
+        <div class="sidebar-search__input">
+
+          <div class="search-item">
+            <p class="search-item__text">Name {{searchName}}</p>
+            <input v-model="searchName" class="search-item-name" placeholder="search by name" />
+          </div>
+          
+          <div class="search-item">
+            <p class="search-item__text">Genre {{searchGenre}}</p>
+            <select v-model="searchGenre" class="search-item-genre">
+              <option value='Book'>Book</option>
+              <option value='Bag'>Bag</option>
+              <option value='Shoes'>Shoes</option>
+              <option value='Clothes'>Clothes</option>
+              <option value='Food'>Food</option>
+            </select>
+          </div>
+          
+          <div class="search-item">
+            <p class="search-item__text">Status {{searchStatus}}</p>
+            <select v-model="searchStatus" class="search-item-status">
+              <option>Delivering</option>
+              <option>Delivered</option>
+              <option>Cancelled</option>
+            </select>
+          </div>
+          
+          
+
+        </div>
+          <button class="clearSearch" @click="clearSearch">Clear</button>
       </div>
 
     </div>
@@ -43,34 +73,40 @@
         <div class="notice-cancelled"><span>{{noticeCancelled}} Cancelled</span></div>
       </div>
       
-      <div class="mainBoard">
+      <div v-if="noPostsFound === false">
+        <div class="mainBoard">
+        
+        
+          <div class='mainBoard-item' v-for="post in filteredItems" :key="post.id" :class="'mainBoard-item-'+[post.id]">
+            <div class="item-header">
 
-        <div class='mainBoard-item' v-for="post in filteredItems" :key="post.id" :class="'mainBoard-item-'+[post.id]">
-          <div class="item-header">
-
-            <img :src="post.image" alt="" class="item-header-img">
-            <div class="item-header-content">
-              <p style="font-size: 1.5rem; font-weight: 600;">{{post.name}}</p>
-              <p style="font-size: 1.3rem;">${{post.price}}</p>
-              <p class="item-body-status" :class="post.status">{{post.status}}</p>
+              <img :src="post.image" alt="" class="item-header-img">
+              <div class="item-header-content">
+                <p style="font-size: 1.5rem; font-weight: 600;">{{post.name}}</p>
+                <p style="font-size: 1.3rem;">${{post.price}}</p>
+                <p class="item-body-status" :class="post.status">{{post.status}}</p>
+              </div>
             </div>
-          </div>
-          <div class="item-body">
-            
-            <!-- <p class="flex"><img src="https://img.icons8.com/arcade/16/FA5252/experimental-gift-arcade.png"/><span style="height: 2.1rem; line-height:2.1rem; font-size: 1.3rem;">{{post.genre}}</span></p> -->
-            <p class="item-body-genre"><i class="fa-regular fa-calendar-days text-2xl"></i>{{post.genre}}</p>
-            <p class="item-body-created_time"><i class="fa-regular fa-calendar-days text-2xl"></i>{{post.created_time}}</p>
-          </div>
+            <div class="item-body">
+              
+              <!-- <p class="flex"><img src="https://img.icons8.com/arcade/16/FA5252/experimental-gift-arcade.png"/><span style="height: 2.1rem; line-height:2.1rem; font-size: 1.3rem;">{{post.genre}}</span></p> -->
+              <p class="item-body-genre"><i class="fa-regular fa-calendar-days text-2xl"></i>{{post.genre}}</p>
+              <p class="item-body-created_time"><i class="fa-regular fa-calendar-days text-2xl"></i>{{post.created_time}}</p>
+            </div>
 
-          <div class="item-footer" >
-            <button class="item-editBtn" @click="reconizeAction(post.id)" data-toggle="modal" data-target="#addProduct-modal">Edit</button>
-            <button class="item-deleteBtn" @click="deleteProduct(post.id)">Delete</button>
+            <div class="item-footer" >
+              <button class="item-editBtn" @click="reconizeAction(post.id)" data-toggle="modal" data-target="#addProduct-modal">Edit</button>
+              <button class="item-deleteBtn" @click="deleteProduct(post.id)">Delete</button>
+            </div>
+            
+            <!-- <div class="price">Price: {{ transaction.price }}</div> -->
           </div>
-          
-          <!-- <div class="price">Price: {{ transaction.price }}</div> -->
         </div>
 
+
       </div>
+
+      <div v-else>No Post found</div>
 
       <!-- <div id="container"></div> -->
   
@@ -110,6 +146,7 @@
               <div class="form-group">
                 <label for="exampleFormControlSelect1">Genre</label>
                 <select v-model="form.genre" class="form-control" id="exampleFormControlSelect1">
+                  <option></option>
                   <option>Book</option>
                   <option>Bag</option>
                   <option>Shoes</option>
@@ -120,6 +157,7 @@
               <div class="form-group">
                 <label for="exampleFormControlSelect1">Status</label>
                 <select v-model="form.status" class="form-control" id="exampleFormControlSelect1">
+                  <option></option>
                   <option>Delivering</option>
                   <option>Delivered</option>
                   <option>Cancelled</option>
@@ -172,14 +210,19 @@ export default {
     let noticeDelivered = ref(null);
     let noticeCancelled = ref(null);
 
+    let searchName = ref('');
+    let searchStatus = ref('');
+    let searchGenre = ref('');
+
     let element;
     let slideIndex = 0;    //current pagination page
     let numBtn;            // number of pages
     let buttons;            // Get all the pagination buttons by document.querySelectorAll(".btn")
     let maxItemsPerPage = 8;
-    let addItemBtn      //Add New Item button
-    let prev
-    let next 
+    let addItemBtn;      //Add New Item button
+    let prev;
+    let next;
+    let selectElement;
 
     let posts = reactive([]);
     let filteredItems = ref([]);
@@ -187,11 +230,11 @@ export default {
     const postsLength = ref(null);
     const waitDispatch = async () => {
       posts = await store.dispatch("fetchAllPostsAsync");
-      return posts
+      return posts;
     }
     waitDispatch()
     .then((result) => {
-      posts = result
+      posts = result;
       filteredItems.value = result;
       // console.log(filteredItems);
       // console.log(filteredItems.length);
@@ -200,19 +243,19 @@ export default {
       console.log('postsLength', postsLength.value); // => null
       
       prev.addEventListener('click', ()=>{
-        slideIndex -= 1
-        resetPageIndex(slideIndex)
+        slideIndex -= 1;
+        resetPageIndex(slideIndex);
         showItems(slideIndex);
       })
 
       next.addEventListener('click', ()=>{
-        slideIndex += 1
-        resetPageIndex(slideIndex)
+        slideIndex += 1;
+        resetPageIndex(slideIndex);
         showItems(slideIndex);
       })
 
       setNumBtn(postsLength.value, 0);
-      setClickBtn()
+      setClickBtn();
     })
 
     // store.dispatch("fetchAllPosts");
@@ -224,9 +267,9 @@ export default {
 
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        isLoggedIn.value = true
+        isLoggedIn.value = true;
       } else {
-        isLoggedIn.value = false
+        isLoggedIn.value = false;
       }
     });
 
@@ -344,7 +387,7 @@ export default {
         buttons[n].classList.add("active");
 
         filteredItems.value = [];
-        posts = store.state.posts;
+        // posts = store.state.posts;
 
         console.log('posts in showItems', posts)
         console.log(posts[posts.length - 1])
@@ -398,6 +441,8 @@ export default {
       console.log(prev);
       next = document.querySelector('.pageNext')
       console.log(next);
+
+      selectElement = document.querySelectorAll('select');
     })
 
     postsLength.value = store.state.postsLen;
@@ -408,11 +453,46 @@ export default {
     });
 
 
+    //SEARCH FUNCTION
+    let noPostsFound = ref(false);
+    watch([searchName, searchGenre, searchStatus], 
+          ([newSearchName, newSearchGenre, newSearchStatus], [oldSearchName, oldSearchGenre, oldSearchStatus]) => {
+      posts = store.state.posts;
+      posts = posts.filter(element => {
+        // 👇️ using AND (&&) operator
+        const filterName = element.name.includes(newSearchName);
+        const filterGenre = element.genre.includes(newSearchGenre);
+        const filterStatus = element.status.includes(newSearchStatus);
+        const filterResult = filterName && filterGenre && filterStatus;
+        return filterResult;
+
+      });
+      console.log('posts in watch', posts);
+      if(posts.length > 0) {
+        noPostsFound.value = false;
+        setNumBtn(posts.length, 0);
+      }
+      else {noPostsFound.value = true}
+      
+    });
+
+    function clearSearch() {
+      console.log(selectElement);
+      selectElement.value = '';
+      searchName.value = '';
+      searchGenre.value = '';
+      searchStatus.value = '';
+      noPostsFound.value = false;
+    }
+
+
     return {handlesSignOut, user, posts, filteredItems, form, addProduct, editProduct, 
             getProduct, reconizeAction, createFlag, itemId, deleteProduct,
             filteredItems, postsLength, root, 
             element, addItemBtn, prev, next,
-            noticeDelivering, noticeDelivered, noticeCancelled}
+            noticeDelivering, noticeDelivered, noticeCancelled,
+            searchName, searchStatus, searchGenre, clearSearch, selectElement, 
+            noPostsFound}
   },
 
 }

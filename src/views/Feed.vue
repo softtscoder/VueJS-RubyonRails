@@ -1,13 +1,19 @@
 <template>
   <div class="bar flex">
     <div id="sidebar" class="font-semibold h-screen pt-5 flex justify-center" style="background-color: #6bcfa2; color: #CC0000; width: 200px; box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;">
-        <div class="mt-15 text-center">
-            <ul class="sidebar__items">
-                <li><router-link to="/"><i class="fa-solid fa-house-user"></i>Home</router-link></li>
-                <li ><router-link to="/feed"><i class="fa-solid fa-list"></i>All Products</router-link> </li>
-                <li class="addProductBtn" data-toggle="modal" data-target="#addProduct-modal" @click="reconizeAction('addProduct')"><i class="fa-solid fa-circle-plus"></i>Add Products</li>
-            </ul>
-        </div>
+      <div class="mt-15 text-center sidebar-menu">
+          <ul class="sidebar__items">
+              <li><router-link to="/"><i class="fa-solid fa-house-user"></i>Home</router-link></li>
+              <li ><router-link to="/feed"><i class="fa-solid fa-list"></i>All Products</router-link> </li>
+              <li class="addProductBtn" data-toggle="modal" data-target="#addProduct-modal" @click="reconizeAction('addProduct')"><i class="fa-solid fa-circle-plus"></i>Add Products</li>
+          </ul>
+      </div>
+
+      <div class="sidebar-search">
+        <p>Search</p>
+        
+      </div>
+
     </div>
 
     <main>
@@ -31,6 +37,12 @@
         
       </div>
       <!-- <div class="mainBoard" v-if="postsLength > 0"> -->
+      <div class="notice">
+        <div class="notice-delivering"><span>{{noticeDelivering}} Delivering</span></div>
+        <div class="notice-delivered"><span>{{noticeDelivered}} Delivered</span></div>
+        <div class="notice-cancelled"><span>{{noticeCancelled}} Cancelled</span></div>
+      </div>
+      
       <div class="mainBoard">
 
         <div class='mainBoard-item' v-for="post in filteredItems" :key="post.id" :class="'mainBoard-item-'+[post.id]">
@@ -155,6 +167,10 @@ export default {
     const itemId = ref(null);
     // let posts = ref(null)
     let form = reactive({name: '', price: '', genre: '', status: '', created_time: ''});
+
+    let noticeDelivering = ref(null);
+    let noticeDelivered = ref(null);
+    let noticeCancelled = ref(null);
 
     let element;
     let slideIndex = 0;    //current pagination page
@@ -342,7 +358,9 @@ export default {
           }
         }
 
-
+        noticeDelivering.value = posts.filter((value) => value.status === 'Delivering').length;
+        noticeDelivered.value = posts.filter((value) => value.status === 'Delivered').length;
+        noticeCancelled.value = posts.filter((value) => value.status === 'Cancelled').length;
         console.log(filteredItems.value);	//show items after filtered
 
       }
@@ -393,7 +411,8 @@ export default {
     return {handlesSignOut, user, posts, filteredItems, form, addProduct, editProduct, 
             getProduct, reconizeAction, createFlag, itemId, deleteProduct,
             filteredItems, postsLength, root, 
-            element, addItemBtn, prev, next}
+            element, addItemBtn, prev, next,
+            noticeDelivering, noticeDelivered, noticeCancelled}
   },
 
 }

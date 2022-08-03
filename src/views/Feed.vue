@@ -91,7 +91,7 @@
             <div class="item-body">
               
               <!-- <p class="flex"><img src="https://img.icons8.com/arcade/16/FA5252/experimental-gift-arcade.png"/><span style="height: 2.1rem; line-height:2.1rem; font-size: 1.3rem;">{{post.genre}}</span></p> -->
-              <p class="item-body-genre"><i class="fa-regular fa-calendar-days text-2xl"></i>{{post.genre}}</p>
+              <p class="item-body-genre"><i class="fa-solid fa-umbrella-beach text-2xl"></i>{{post.genre}}</p>
               <p class="item-body-created_time"><i class="fa-regular fa-calendar-days text-2xl"></i>{{post.created_time}}</p>
             </div>
 

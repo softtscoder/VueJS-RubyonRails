@@ -38,6 +38,10 @@ main {
     color: black;
 }
 
+.navbar__hamburger:hover {
+    cursor: pointer;
+}
+
 .navbar__userLink-info {
     font-size: 2rem;
     position: relative;
